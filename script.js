@@ -2,7 +2,6 @@ const mysql = require("mysql");
 const inquirer = require("inquirer");
 // const art = require("ascii-art");
 const table = require("console.table");
-const Employee = require("./lib/Employee")
 const prompts = require("./lib/prompts")
 const query = require("./lib/query")
 
@@ -28,6 +27,7 @@ connection.connect(function(err) {
 
 // Main Function //
 function getAnswer() {
+  query.team();
   inquirer
     .prompt([
       {
@@ -38,9 +38,12 @@ function getAnswer() {
           "View all Employees by Department",
           "View all Employees by Manager",
           "Add Employee",
+          "Add Department!",
+          "Add Role!",
           "Remove Employee",
           "Update Employee Role",
           "Update Employee Manager"
+          
         ],
         name: "action"
       }
@@ -49,51 +52,51 @@ function getAnswer() {
       switch (res.action) {
         case "View all Employees":
           query.displayAll();
-          getAnswer()
+          
           break;
       }
       switch (res.action) {
         case "View all Employees by Department":
-          prompts.displayDep()
+          prompts.displayDep();
+          
           break;
       }
       switch (res.action) {
         case "View all Employees by Manager":
-         prompts.displayMan()
+         prompts.displayMan();
       
         break;
       }
 
       switch (res.action) {
         case "Add Employee":
+          prompts.addEmployee();
+        
           break;
       }
       switch (res.action) {
         case "Remove Employee":
+          prompts.removeEmployee();
+          
+          getAnswer()
           break;
       }
       switch (res.action) {
         case "Update Employee Role":
+          prompts.updateEmployee()
           break;
       }
       switch (res.action) {
-        case "Update Employee Manager":
+        case "Add Department! ":
+          prompts.addDepartment()
+          break;
+      }
+      switch (res.action) {
+        case "Add Role!":
+          prompts.addRole()
           break;
       }
     });
 }
 
 
-function displayAll() {
-  connection.query(
-    "SELECT First_name, Last_name FROM Employee LEFT JOIN Role ON Employee.role_id = Role.id",
-
-    function(err, res) {
-      if (err) throw err;
-      console.table(res);
-    }
-  );
-}
-
-
-  
